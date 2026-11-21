@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Galaxy X3D · Animación 3D y 2D en tu móvil</title>
+<meta name="description" content="Galaxy X3D: anima en 3D y en 2D desde el móvil. Huesos, partículas, materiales, estilos de render y vídeo MP4. Gratis para Android.">
+<meta property="og:title" content="Galaxy X3D">
+<meta property="og:description" content="Animación 3D y 2D en una sola app para Android.">
+<meta property="og:image" content="icon.png">
+<link rel="icon" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --space:#06061a;
+  --deep:#0d0b24;
+  --card:#14112e;
+  --line:#2a2552;
+  --violet:#8c72ff;
+  --mint:#3ee6c4;
+  --pink:#ff5c9d;
+  --text:#ecebfa;
+  --dim:#a39fc4;
+  --radius:20px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:76px}
+body{
+  background:var(--space);color:var(--text);
+  font-family:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  line-height:1.6;font-size:16px;overflow-x:hidden;
+}
+h1,h2,h3{font-family:"Sora","Manrope",system-ui,sans-serif;line-height:1.15;letter-spacing:-.01em}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--mint);outline-offset:3px;border-radius:8px}
+#stars{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.glow{position:absolute;inset:0 0 auto 0;height:900px;z-index:0;pointer-events:none;
+  background:radial-gradient(60% 55% at 50% 0%,rgba(140,114,255,.38),transparent 70%)}
+main,header,footer{position:relative;z-index:1}
+.wrap{width:min(1100px,100% - 40px);margin-inline:auto}
+
+/* barra superior */
+header{position:sticky;top:0;z-index:20;background:rgba(6,6,26,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(140,114,255,.18)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;height:64px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:"Sora",sans-serif;font-weight:800;font-size:19px;white-space:nowrap}
+.brand img{width:34px;height:34px;border-radius:9px;object-fit:cover}
+.brand b{color:var(--mint)}
+.links{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.links::-webkit-scrollbar{display:none}
+.links a{padding:8px 14px;border-radius:999px;text-decoration:none;color:var(--dim);font-weight:500;font-size:15px;white-space:nowrap;transition:background .2s,color .2s}
+.links a:hover,.links a.on{background:rgba(140,114,255,.16);color:#fff}
+
+/* portada */
+.hero{padding:72px 0 56px;text-align:center}
+.hero .logo{display:block;margin:0 auto 20px;width:min(380px,78%);height:auto;max-height:190px;object-fit:contain}
+.hero h1{font-size:clamp(34px,6.4vw,64px);font-weight:800;max-width:15ch;margin:0 auto 18px}
+.hero h1 span{background:linear-gradient(90deg,var(--violet),var(--mint));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{max-width:60ch;margin:0 auto 30px;color:var(--dim);font-size:clamp(16px,2.2vw,19px)}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:15px 26px;border-radius:16px;text-decoration:none;font-weight:700;font-size:16px;transition:transform .15s,box-shadow .2s;border:1px solid transparent}
+.btn:active{transform:scale(.97)}
+.btn.main{background:linear-gradient(135deg,var(--mint),#27c9ff);color:#04131a;box-shadow:0 10px 34px rgba(62,230,196,.28)}
+.btn.main:hover{box-shadow:0 12px 40px rgba(62,230,196,.45)}
+.btn.alt{background:rgba(140,114,255,.14);border-color:var(--violet);color:#e3dcff}
+.btn.alt:hover{background:rgba(140,114,255,.26)}
+
+/* secciones */
+section{padding:72px 0}
+.head{max-width:62ch;margin-bottom:36px}
+.head h2{font-size:clamp(26px,4.4vw,40px);font-weight:800;margin-bottom:10px}
+.head p{color:var(--dim)}
+
+/* funciones */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px}
+.card{background:linear-gradient(180deg,var(--card),var(--deep));border:1px solid var(--line);border-radius:var(--radius);padding:24px 22px;transition:border-color .2s,transform .2s}
+.card:hover{border-color:var(--violet);transform:translateY(-3px)}
+.card .ico{font-size:30px;line-height:1;margin-bottom:14px;display:block}
+.card h3{font-size:19px;margin-bottom:8px}
+.card p{color:var(--dim);font-size:15px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tags span{font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:rgba(62,230,196,.1);color:var(--mint);border:1px solid rgba(62,230,196,.25)}
+
+/* por qué 3D + 2D */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.panel{border-radius:26px;padding:30px 26px;border:1px solid var(--line);position:relative;overflow:hidden}
+.panel.d2{background:linear-gradient(160deg,#0f2530,#0a1620);border-color:rgba(62,230,196,.45)}
+.panel.d3{background:linear-gradient(160deg,#1d1838,#120f26);border-color:rgba(140,114,255,.55)}
+.panel h3{font-size:24px;margin-bottom:4px}
+.panel.d2 h3{color:var(--mint)}
+.panel.d3 h3{color:#b9a8ff}
+.panel .sub{color:var(--dim);margin-bottom:16px;font-size:15px}
+.panel ul{list-style:none;display:grid;gap:10px}
+.panel li{padding-left:24px;position:relative;font-size:15px}
+.panel li::before{content:"";position:absolute;left:0;top:.55em;width:10px;height:10px;border-radius:50%}
+.d2 li::before{background:var(--mint)}
+.d3 li::before{background:var(--violet)}
+
+/* descarga */
+.dl{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:stretch}
+.box{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:28px 26px}
+.box h3{font-size:22px;margin-bottom:14px}
+.box ol{padding-left:20px;display:grid;gap:10px;color:#d8d5ee;margin-bottom:22px}
+.box ol b{color:#fff}
+.note{margin-top:18px;color:var(--dim);font-size:14px}
+.note a{color:var(--mint)}
+.pill{display:inline-block;padding:3px 10px;border-radius:999px;background:rgba(255,92,157,.14);color:#ff9cc0;font-size:13px;font-weight:700;margin-bottom:12px}
+
+
+footer{border-top:1px solid rgba(140,114,255,.18);padding:34px 0 46px;color:var(--dim);font-size:14px;margin-top:30px}
+footer .row{display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;align-items:center}
+footer a{color:#cfc6ff;text-decoration:none;margin-left:16px}
+footer a:first-child{margin-left:0}
+footer a:hover{color:#fff}
+
+@media (max-width:760px){
+  .duo,.dl{grid-template-columns:1fr}
+  .hero{padding-top:48px}
+  section{padding:54px 0}
+  .links a{padding:8px 11px}
+  .brand span.t{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{transition:none!important}
+}
+</style>
+</head>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+<div class="glow" aria-hidden="true"></div>
+
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#"><img src="icon.png" alt="" onerror="this.style.display='none'"><span class="t">Galaxy <b>X3D</b></span></a>
+    <nav class="links" aria-label="Principal">
+      <a href="#">Inicio</a>
+      <a href="#funciones">Funciones</a>
+      <a href="#descargar">Descargar</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero" style="padding-bottom:40px">
+    <div class="wrap">
+      <img class="logo" src="logo.png" alt="Logo de Galaxy X3D" onerror="this.style.display='none'">
+      <h1>Anima en <span>3D y 2D</span> desde tu móvil.</h1>
+      <p class="lead">Galaxy X3D es una app de animación completa para Android: personajes con huesos, partículas, materiales, estilos de render y vídeo MP4. Gratis.</p>
+      <div class="btns">
+        <a class="btn main" id="dl-android" href="#descargar">⬇ Descargar para Android</a>
+        <a class="btn alt" href="#funciones">Ver funciones</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="funciones">
+    <div class="wrap">
+      <div class="head">
+        <h2>Todo para animar, en una sola app.</h2>
+        <p>Pensada para la pantalla táctil, con una interfaz que se adapta a móviles de cualquier tamaño.</p>
+      </div>
+      <div class="grid">
+        <article class="card"><span class="ico">🎬</span><h3>Animar</h3>
+          <p>Fotogramas clave con línea de tiempo infinita, curvas, bucles, copiar y pegar claves y audio sincronizado.</p>
+          <div class="tags"><span>Timeline</span><span>Audio</span><span>Cámaras</span></div></article>
+
+        <article class="card"><span class="ico">🦴</span><h3>Personajes con huesos</h3>
+          <p>Modo pose con gizmo de mover y rotar, cinemática inversa (IK), selección precisa de huesos y los modelos importados conservan su rig.</p>
+          <div class="tags"><span>IK</span><span>Rig</span><span>Pose</span></div></article>
+
+        <article class="card"><span class="ico">🧩</span><h3>Piezas y jerarquía</h3>
+          <p>Los modelos se importan divididos en piezas. Elige, oculta, quita o dale brillo a cada pieza sin borrar el modelo entero.</p>
+          <div class="tags"><span>Piezas</span><span>Glow</span><span>Opacidad</span></div></article>
+
+        <article class="card"><span class="ico">🎨</span><h3>Materiales</h3>
+          <p>Editor de materiales con color, opacidad y texturas, para cada pieza de tus modelos.</p>
+          <div class="tags"><span>Color</span><span>Texturas</span></div></article>
+
+        <article class="card"><span class="ico">✨</span><h3>Estilos de render</h3>
+          <p>11 estilos de imagen con intensidad ajustable, incluido «Atlas 3D Cinematic». Mejora la calidad con glow, oclusión ambiental, iluminación realista y sombras suaves.</p>
+          <div class="tags"><span>Cinematic</span><span>Glow</span><span>AO</span></div></article>
+
+        <article class="card"><span class="ico">🌦️</span><h3>Escenas y clima</h3>
+          <p>Cielo con sol, mar, lluvia con sonido, tornado, tsunami y relámpagos. Más de 30 modelos en una misma escena.</p>
+          <div class="tags"><span>Mar</span><span>Lluvia</span><span>Tornado</span></div></article>
+
+        <article class="card"><span class="ico">🔥</span><h3>Partículas</h3>
+          <p>Fuego en área, humo, chispas, lluvia y más. Importa partículas de Source (.pcf) con sus texturas .vmt y .vtf.</p>
+          <div class="tags"><span>PCF</span><span>VMT/VTF</span><span>Fuego</span></div></article>
+
+        <article class="card"><span class="ico">🧵</span><h3>Telas y físicas</h3>
+          <p>Simulación de tela para banderas, capas y ropa, con gravedad y colisiones.</p>
+          <div class="tags"><span>Tela</span><span>Gravedad</span></div></article>
+
+        <article class="card"><span class="ico">📦</span><h3>Importa de todo</h3>
+          <p>GLB/glTF, FBX, OBJ, BLEND, Prisma3D, Blockbench y modelos de Source (DMX, PCF). Exporta tu escena a GLB, OBJ y más.</p>
+          <div class="tags"><span>Source</span><span>Prisma3D</span><span>Blender</span></div></article>
+
+        <article class="card"><span class="ico">🎥</span><h3>Render y vídeo</h3>
+          <p>Render por fotogramas con exportación rápida. Vídeo MP4, GIF o secuencia PNG, con barra de progreso y tiempo restante.</p>
+          <div class="tags"><span>MP4</span><span>GIF</span><span>PNG</span></div></article>
+
+        <article class="card"><span class="ico">📱</span><h3>Para cualquier móvil</h3>
+          <p>Perfiles de calidad, modo ahorro y escala de resolución para que funcione fluido incluso en móviles modestos. Español, inglés, portugués y ruso.</p>
+          <div class="tags"><span>Gama baja</span><span>4 idiomas</span></div></article>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <div class="head">
+        <h2>Dos modos, una sola app.</h2>
+        <p>Elige en el menú principal: dibujar a mano o animar en tres dimensiones.</p>
+      </div>
+      <div class="duo">
+        <div class="panel d2">
+          <h3>Animación 2D</h3>
+          <p class="sub">Dibuja cuadro a cuadro.</p>
+          <ul>
+            <li>Capas, papel cebolla y cuadrícula.</li>
+            <li>Lápiz, pluma, marcador, pincel, aerógrafo, caligrafía, carboncillo y acuarela.</li>
+            <li>Relleno, formas, simetría y zoom con dos dedos.</li>
+            <li><b>Partículas 2D:</b> fuego, lluvia, polvo, nieve y chispas.</li>
+            <li>Audio en la línea de tiempo.</li>
+            <li>Exporta MP4, GIF, secuencia PNG o spritesheet.</li>
+          </ul>
+        </div>
+        <div class="panel d3">
+          <h3>Animación 3D</h3>
+          <p class="sub">Escenas, modelos y cámaras.</p>
+          <ul>
+            <li>Importa modelos con rig y animaciones.</li>
+            <li>Huesos con IK, piezas y jerarquía de la escena.</li>
+            <li>Luces, cielo, mar, clima y partículas.</li>
+            <li>Estilos de render y calidad de cine.</li>
+            <li>Cámaras de escena con movimiento.</li>
+            <li>Exporta vídeo MP4, GIF o secuencia PNG.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="descargar">
+    <div class="wrap">
+      <div class="head">
+        <h2>Descargar</h2>
+        <p>Siempre la versión más nueva. Gratis y sin cuenta.</p>
+      </div>
+      <div class="dl">
+        <div class="box">
+          <span class="pill">Android</span>
+          <h3>Instala en tu móvil</h3>
+          <ol>
+            <li>Descarga el archivo <b>GalaxyX3D-Android.apk</b>.</li>
+            <li>Ábrelo. Si el teléfono lo pide, permite «instalar apps de origen desconocido».</li>
+            <li>Las versiones nuevas se instalan encima: no pierdes tus proyectos.</li>
+          </ol>
+          <a class="btn main" id="dl-apk" href="#">⬇ Descargar APK</a>
+        </div>
+        <div class="box">
+          <h3>¿Algo no funciona?</h3>
+          <p style="color:var(--dim)">Si encuentras un error, cuéntanos qué hacías y en qué móvil lo viste. Así podemos arreglarlo en la siguiente versión.</p>
+          <p class="note">¿Versiones anteriores? Están todas en la <a id="all-versions" href="#">lista de versiones</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap row">
+    <span>Galaxy X3D · Hecho por Darkness Studios</span>
+    <span><a href="#funciones">Funciones</a><a href="#descargar">Descargar</a></span>
+  </div>
+</footer>
+
+<script>
+/* ===== Configuración: cambia estos enlaces por los tuyos ===== */
+var CONFIG = {
+  apk: "https://github.com/darkness-studios/GALAXY-X3D/releases/latest/download/Galaxy X3D-1.8.1 (BETA).apk",
+  releases: "https://github.com/darkness-studios/GALAXY-X3D/releases"
+};
+document.getElementById("dl-apk").href = CONFIG.apk;
+document.getElementById("dl-android").href = CONFIG.apk;
+document.getElementById("all-versions").href = CONFIG.releases;
+
+/* ===== Menú: marca la sección visible ===== */
+(function(){
+  var links = [].slice.call(document.querySelectorAll(".links a"));
+  var map = links.map(function(a){ var h = a.getAttribute("href"); return h.length > 1 ? document.querySelector(h) : null; });
+  function mark(){
+    var y = window.scrollY + 120, cur = 0;
+    map.forEach(function(s,i){ if (s && s.offsetTop <= y) cur = i; });
+    links.forEach(function(a,i){ a.classList.toggle("on", i === cur); });
+  }
+  window.addEventListener("scroll", mark, {passive:true}); mark();
+})();
+
+/* ===== Fondo de estrellas con parpadeo ===== */
+(function(){
+  var c = document.getElementById("stars"), x = c.getContext("2d");
+  var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var W, H, S = [];
+  function size(){
+    var d = Math.min(window.devicePixelRatio || 1, 2);
+    W = c.width = innerWidth * d; H = c.height = innerHeight * d;
+    S = [];
+    for (var i = 0; i < Math.round(innerWidth * innerHeight / 9000); i++)
+      S.push({x:Math.random()*W, y:Math.random()*H, r:(Math.random()*1.3+.3)*d, p:Math.random()*6.28, v:Math.random()*.02+.005,
+              c:Math.random() < .25 ? "62,230,196" : (Math.random() < .5 ? "190,170,255" : "255,255,255")});
+  }
+  function draw(){
+    x.clearRect(0,0,W,H);
+    S.forEach(function(s){
+      s.p += s.v;
+      x.fillStyle = "rgba(" + s.c + "," + (.35 + .45*Math.sin(s.p)) + ")";
+      x.beginPath(); x.arc(s.x, s.y, s.r, 0, 6.28); x.fill();
+    });
+    if (!still) requestAnimationFrame(draw);
+  }
+  addEventListener("resize", size); size(); draw();
+})();
+</script>
+</body>
+</html>
